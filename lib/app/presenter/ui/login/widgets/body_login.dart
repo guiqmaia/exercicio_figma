@@ -13,7 +13,7 @@ import 'sign_in_text.dart';
 import 'sign_up_button.dart';
 
 class BodyLogin extends HookConsumerWidget {
-  const BodyLogin({
+  BodyLogin({
     Key? key,
     required GlobalKey<FormState> formKey,
     required this.mailController,
@@ -24,9 +24,11 @@ class BodyLogin extends HookConsumerWidget {
   final GlobalKey<FormState> _formKey;
   final TextEditingController mailController;
   final TextEditingController passwordController;
+  bool invalidLogin = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 35),
       child: Form(
@@ -53,11 +55,15 @@ class BodyLogin extends HookConsumerWidget {
               onTap: () async {
                 if (_formKey.currentState!.validate()) {
                   ref.watch(userProvider.notifier).getUserInfo(mailController.text, passwordController.text);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: ((context) => const HomePage()),
-                    ),
-                  );
+                  if (user!.nome != '') {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: ((context) => const HomePage()),
+                      ),
+                    );
+                  } else {
+                    invalidLogin = !invalidLogin;
+                  }
                 }
               },
               child: Container(
@@ -76,6 +82,25 @@ class BodyLogin extends HookConsumerWidget {
                       fontSize: 20,
                       letterSpacing: 0.5,
                     ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            Visibility(
+              visible: invalidLogin,
+              replacement: const SizedBox.shrink(),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                child: Text(
+                  'Alguma informação do login está incorreta ou ela não existe',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
