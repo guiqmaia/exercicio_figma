@@ -53,11 +53,13 @@ class BodyLogin extends HookConsumerWidget {
               onTap: () async {
                 if (_formKey.currentState!.validate()) {
                   ref.watch(userProvider.notifier).getUserInfo(mailController.text, passwordController.text);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: ((context) => const HomePage()),
-                    ),
-                  );
+                  if (user.nome != '') {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: ((context) => const HomePage()),
+                      ),
+                    );
+                  }
                 }
               },
               child: Container(

@@ -14,7 +14,6 @@ class UserNotifier extends StateNotifier<UserModel?> {
 
   Future<void> getUserInfo(String email, String senha) async {
     user = await LogonAuthenticator.userAuthenticator(email, senha);
-    Future.delayed(const Duration(seconds: 2));
     state = user;
   }
 }

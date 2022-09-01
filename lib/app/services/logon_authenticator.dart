@@ -14,7 +14,6 @@ class LogonAuthenticator {
         "email": email,
         "password": senha,
       };
-
       final response = await dio.post(
         "http://192.168.0.142/api/Access/Logon",
         data: jsonEncode(myMap),
